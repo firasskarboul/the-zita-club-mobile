@@ -63,6 +63,7 @@ export default function App() {
 
       try {
         await AsyncStorage.setItem('userToken', userToken);
+        // await AsyncStorage.setItem('userName', userName);
       } catch (e) {
         console.log(e);
       }
@@ -71,6 +72,7 @@ export default function App() {
     signOut: async () => {
       try {
         await AsyncStorage.removeItem('userToken');
+        // await AsyncStorage.removeItem('userName');
       } catch (e) {
         console.log(e);
       }

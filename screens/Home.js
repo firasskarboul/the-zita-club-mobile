@@ -1,39 +1,51 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AuthContext } from '../components/Context'
+import { SimpleLineIcons } from '@expo/vector-icons';
 
-export default function Home() {
+export default function Home({ navigation }) {
 
     const { signOut } = useContext(AuthContext)
 
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container}>
             <LinearGradient
                 // Background Linear Gradient
                 colors={['#7F00FF', '#E100FF']}
                 style={styles.background}
             />
-            <TouchableOpacity style={{ ...styles.navButton, marginBottom: 50 }}>
-                <Text style={{ color: 'white', fontSize: 40 }}>PAIEMENT</Text>
+            <TouchableOpacity style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                
+            }} onPress={() => { signOut() }}>
+                <SimpleLineIcons name="logout" size={30} color="white" style={{ padding: 10, marginRight: 10 }} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.navButton}>
-                <Text style={{ color: 'white', fontSize: 40, textAlign: 'center' }}>SCAN QR CODE</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ marginTop: 50 }} onPress={() => { signOut() }}>
-                <Text style={{ fontSize: 25, color: 'white', fontWeight: 'bold' }}>SIGN OUT</Text>
-            </TouchableOpacity>
+            <View style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <TouchableOpacity style={{ ...styles.navButton, marginBottom: 50 }} onPress={() => navigation.navigate('Paiement')}>
+                    <Text style={{ color: 'white', fontSize: 40 }}>PAIEMENT</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Scan')}>
+                    <Text style={{ color: 'white', fontSize: 40, textAlign: 'center' }}>SCAN QR CODE</Text>
+                </TouchableOpacity>
+            </View>
+
+
             <StatusBar style="auto" />
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     background: {
         position: 'absolute',

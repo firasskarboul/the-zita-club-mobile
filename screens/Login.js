@@ -35,6 +35,7 @@ export default function Login() {
                 })
                 .catch(e => {
                     alert('L\'email ou le mot de passe est incorrect.')
+                    setLoading(false)
                 })
         }
     }

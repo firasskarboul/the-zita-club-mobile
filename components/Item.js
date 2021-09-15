@@ -64,6 +64,11 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                     }}
                                     onPress={async () => {
                                         setLoadingPaiement(true)
+
+                                        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                                        var charactersLength = characters.length;
+                                        let result = ''
+
                                         await axios.put(`http://thezitaclub.xyz/api/reservations/${id}`, {
                                             'fullName': fullName,
                                             'email': email,
@@ -72,11 +77,20 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                             'payment': 1,
                                         })
                                             .then(async res => {
+                                                var timestamp = new Date().getUTCMilliseconds();
+                                                for (var i = 0; i < 12; i++) {
+                                                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                                                }
+                                                let orderCode = result + timestamp
+                                                let userID
+
+                                                // userID = await AsyncStorage.getItem('userName');
 
                                                 await axios.post(`http://thezitaclub.xyz/api/orders`, {
-                                                    'orderCode': 'ASKJHSJHKJHSKJ',
+                                                    'orderCode': orderCode,
+                                                    // 'user_id': userID,
                                                     'user_id': 1,
-                                                    'reservation_id': 1,
+                                                    'reservation_id': res.data,
                                                     'attendance': false
                                                 })
                                                     .then(res => {
@@ -85,6 +99,7 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                                     })
                                                     .catch(e => {
                                                         console.log(e)
+                                                        setLoadingPaiement(false)
                                                     })
                                             })
                                             .catch(e => {

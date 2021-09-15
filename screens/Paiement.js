@@ -2,11 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Dimensions, FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Linking, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Foundation, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import axios from "axios";
 import Item from '../components/Item.js'
 
-export default function Paiement() {
+export default function Paiement({ navigation }) {
 
     const [loadingReservation, setLoadingReservation] = useState(false)
 
@@ -57,31 +57,23 @@ export default function Paiement() {
                 colors={['#7F00FF', '#E100FF']}
                 style={styles.background}
             />
-            <TextInput
-                style={{ ...styles.textInput, width: Dimensions.get('screen').width / 1.1, marginTop: 20 }}
-                placeholder='Taper le numéro de réservation'
-                placeholderTextColor='rgba(255,255,255,0.7)'
-                onChangeText={text => { setSearchText(text) }}
-            />
-            {
-                loadingReservation ? (
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: 'row',
-                            width: Dimensions.get('screen').width / 1.1,
-                            height: 45,
-                            backgroundColor: '#00a8ff',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginTop: 20,
-                            borderRadius: 10
-                        }}
-                        disabled
-                    >
-                        <ActivityIndicator size='small' color='white' />
-                    </TouchableOpacity>
-                )
-                    : (
+            <TouchableOpacity
+                onPress={() => { navigation.goBack() }}
+                style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 14 }}
+            >
+                <Ionicons name="ios-arrow-back-outline" size={40} color="white" />
+                <Text style={{ fontSize: 25, color: 'white' }}>Retour</Text>
+            </TouchableOpacity>
+
+            <View style={{ flex: 1, alignItems: 'center' }}>
+                <TextInput
+                    style={{ ...styles.textInput, width: Dimensions.get('screen').width / 1.1, marginTop: 20 }}
+                    placeholder='Taper le numéro de réservation'
+                    placeholderTextColor='rgba(255,255,255,0.7)'
+                    onChangeText={text => { setSearchText(text) }}
+                />
+                {
+                    loadingReservation ? (
                         <TouchableOpacity
                             style={{
                                 flexDirection: 'row',
@@ -93,24 +85,42 @@ export default function Paiement() {
                                 marginTop: 20,
                                 borderRadius: 10
                             }}
-                            onPress={search}
+                            disabled
                         >
-                            <FontAwesome name="search" size={25} color="white" />
-                            <Text style={{ color: 'white', fontSize: 30, marginLeft: 8 }}>Recherche</Text>
+                            <ActivityIndicator size='small' color='white' />
                         </TouchableOpacity>
                     )
-            }
-            <SafeAreaView style={{ marginTop: 50 }}>
-                {reservations.length == 0 ?
-                    <Text style={{ fontSize: 25, textAlign: 'center', margin: 20, color: 'white' }}>{noDataMessage}</Text>
-                    :
-                    <FlatList
-                        data={reservations}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
-                    />
+                        : (
+                            <TouchableOpacity
+                                style={{
+                                    flexDirection: 'row',
+                                    width: Dimensions.get('screen').width / 1.1,
+                                    height: 45,
+                                    backgroundColor: '#00a8ff',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: 20,
+                                    borderRadius: 10
+                                }}
+                                onPress={search}
+                            >
+                                <FontAwesome name="search" size={25} color="white" />
+                                <Text style={{ color: 'white', fontSize: 30, marginLeft: 8 }}>Recherche</Text>
+                            </TouchableOpacity>
+                        )
                 }
-            </SafeAreaView>
+                <SafeAreaView style={{ marginTop: 50 }}>
+                    {reservations.length == 0 ?
+                        <Text style={{ fontSize: 25, textAlign: 'center', margin: 20, color: 'white' }}>{noDataMessage}</Text>
+                        :
+                        <FlatList
+                            data={reservations}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id}
+                        />
+                    }
+                </SafeAreaView>
+            </View>
             <StatusBar style="auto" />
         </SafeAreaView>
     );
@@ -119,7 +129,6 @@ export default function Paiement() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
     },
     background: {
         position: 'absolute',
