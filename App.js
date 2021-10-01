@@ -28,6 +28,7 @@ export default function App() {
         return {
           ...prevState,
           userToken: action.token,
+          id: action.id,
           isLoading: false,
         };
       case 'LOGIN':
@@ -59,37 +60,35 @@ export default function App() {
   const authContext = React.useMemo(() => ({
     signIn: async (foundUser) => {
       const userToken = foundUser.token
-      const userName = foundUser.user.id;
+      const userName = JSON.stringify(foundUser.user.id)
 
       try {
-        await AsyncStorage.setItem('userToken', userToken);
-        // await AsyncStorage.setItem('userName', userName);
+        await AsyncStorage.multiSet([["userToken", userToken], ["userName", userName]]);
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-      dispatch({ type: 'LOGIN', id: userName, token: userToken });
+      dispatch({ type: 'LOGIN', id: userName, token: userToken })
     },
     signOut: async () => {
       try {
-        await AsyncStorage.removeItem('userToken');
-        // await AsyncStorage.removeItem('userName');
+        await AsyncStorage.multiRemove(['userToken', 'userName'])
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
-      dispatch({ type: 'LOGOUT' });
+      dispatch({ type: 'LOGOUT' })
     },
   }), []);
 
   useEffect(() => {
     setTimeout(async () => {
-      let userToken;
-      userToken = null;
+      let user;
+      user = null;
       try {
-        userToken = await AsyncStorage.getItem('userToken');
+        user = await AsyncStorage.multiGet(['userToken', 'userName']);
       } catch (e) {
         console.log(e);
       }
-      dispatch({ type: 'RETRIEVE_TOKEN', token: userToken });
+      dispatch({ type: 'RETRIEVE_TOKEN', id: user[1][1], token: user[0][1] })
     }, 1000);
   }, []);
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Linking, ActivityIndicator } from 'react-native';
 import { Foundation, MaterialIcons } from '@expo/vector-icons';
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Item({ id, reservationCode, fullName, email, phoneNumber, payment, broughtBy, date }) {
 
@@ -82,15 +83,14 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                                     result += characters.charAt(Math.floor(Math.random() * charactersLength));
                                                 }
                                                 let orderCode = result + timestamp
-                                                let userID
+                                                let user
 
-                                                // userID = await AsyncStorage.getItem('userName');
+                                                user = await AsyncStorage.multiGet(['userName']);
 
                                                 await axios.post(`http://thezitaclub.xyz/api/orders`, {
                                                     'orderCode': orderCode,
-                                                    // 'user_id': userID,
-                                                    'user_id': 1,
-                                                    'reservation_id': res.data,
+                                                    'user_id': user[0][1],
+                                                    'reservation_id': id,
                                                     'attendance': false
                                                 })
                                                     .then(res => {

@@ -18,7 +18,6 @@ export default function Login() {
 
     const validate = async (userName, password) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        let foundUser;
         if (reg.test(userName) === false) {
             alert("Veuillez saisir un email valide");
         }
