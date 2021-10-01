@@ -66,6 +66,19 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                     onPress={async () => {
                                         setLoadingPaiement(true)
 
+                                        let tokenArray
+
+                                        tokenArray = await AsyncStorage.multiGet(['userToken']);
+
+                                        let token = tokenArray[0][1]
+
+                                        const config = {
+                                            headers: {
+                                                Accept: "application/json",
+                                                Authorization: `Bearer ${token}`
+                                            }
+                                        };
+
                                         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                                         var charactersLength = characters.length;
                                         let result = ''
@@ -76,7 +89,7 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                             'phoneNumber': phoneNumber,
                                             'broughtBy': broughtBy,
                                             'payment': 1,
-                                        })
+                                        }, config)
                                             .then(async res => {
                                                 var timestamp = new Date().getUTCMilliseconds();
                                                 for (var i = 0; i < 12; i++) {
@@ -92,7 +105,7 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                                     'user_id': user[0][1],
                                                     'reservation_id': id,
                                                     'attendance': false
-                                                })
+                                                }, config)
                                                     .then(res => {
                                                         setPaiement(!payment)
                                                         setLoadingPaiement(false)

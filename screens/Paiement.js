@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import axios from "axios";
 import Item from '../components/Item.js'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Paiement({ navigation }) {
 
@@ -29,11 +30,25 @@ export default function Paiement({ navigation }) {
     };
 
     const search = async () => {
+
+        let tokenArray
+
+        tokenArray = await AsyncStorage.multiGet(['userToken']);
+
+        let token = tokenArray[0][1]
+
+        const config = {
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        };
+
         if (searchText.length == 0)
             alert('Vous devez insérer un code de réservation')
         else {
             setLoadingReservation(true)
-            await axios.get(`https://thezitaclub.xyz/api/reservations/${searchText}`)
+            await axios.get(`https://thezitaclub.xyz/api/reservations/${searchText}`, config)
                 .then(res => {
                     setReservations(res.data)
                     if (res.data.length == 0)

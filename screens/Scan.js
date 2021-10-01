@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Scan({ navigation }) {
 
@@ -31,8 +32,17 @@ export default function Scan({ navigation }) {
     const handleQrCodeScanned = async ({ type, data }) => {
         setScanned(true)
         setLoading(true)
+
+        let token
+
+        token = await AsyncStorage.multiGet(['userToken']);
+
+        const config = {
+            headers: { Authorization: `Bearer ${token[0][1]}` }
+        };
+
         await axios
-            .get(`https://thezitaclub.xyz/api/orders/${data}`)
+            .get(`https://thezitaclub.xyz/api/orders/${data}`, config)
             .then(async res => {
                 if (res.data.length == 0) {
                     setText('-1')
@@ -42,7 +52,7 @@ export default function Scan({ navigation }) {
                             'orderCode': res.data[0].orderCode,
                             'user_id': res.data[0].user_id,
                             'reservation_id': res.data[0].reservation_id,
-                        })
+                        }, config)
                         .then(async res => {
                             setText('1')
                         })
