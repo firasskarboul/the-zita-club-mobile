@@ -33,7 +33,7 @@ export default function Paiement({ navigation }) {
             alert('Vous devez insérer un code de réservation')
         else {
             setLoadingReservation(true)
-            await axios.get(`http://thezitaclub.xyz/api/reservations/${searchText}`)
+            await axios.get(`https://thezitaclub.xyz/api/reservations/${searchText}`)
                 .then(res => {
                     setReservations(res.data)
                     if (res.data.length == 0)

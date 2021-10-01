@@ -24,7 +24,7 @@ export default function Login() {
         else {
             setLoading(true)
             await axios
-                .post(`http://thezitaclub.xyz/api/login`, {
+                .post(`https://thezitaclub.xyz/api/login`, {
                     "email": userName,
                     "password": password
                 })

@@ -70,7 +70,7 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
                                         var charactersLength = characters.length;
                                         let result = ''
 
-                                        await axios.put(`http://thezitaclub.xyz/api/reservations/${id}`, {
+                                        await axios.put(`https://thezitaclub.xyz/api/reservations/${id}`, {
                                             'fullName': fullName,
                                             'email': email,
                                             'phoneNumber': phoneNumber,
@@ -87,7 +87,7 @@ export default function Item({ id, reservationCode, fullName, email, phoneNumber
 
                                                 user = await AsyncStorage.multiGet(['userName']);
 
-                                                await axios.post(`http://thezitaclub.xyz/api/orders`, {
+                                                await axios.post(`https://thezitaclub.xyz/api/orders`, {
                                                     'orderCode': orderCode,
                                                     'user_id': user[0][1],
                                                     'reservation_id': id,

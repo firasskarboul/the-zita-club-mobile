@@ -32,13 +32,13 @@ export default function Scan({ navigation }) {
         setScanned(true)
         setLoading(true)
         await axios
-            .get(`http://thezitaclub.xyz/api/orders/${data}`)
+            .get(`https://thezitaclub.xyz/api/orders/${data}`)
             .then(async res => {
                 if (res.data.length == 0) {
                     setText('-1')
                 } else if (res.data[0].attendance == false) {
                     await axios
-                        .put(`http://thezitaclub.xyz/api/orders/${res.data[0].id}`, {
+                        .put(`https://thezitaclub.xyz/api/orders/${res.data[0].id}`, {
                             'orderCode': res.data[0].orderCode,
                             'user_id': res.data[0].user_id,
                             'reservation_id': res.data[0].reservation_id,
