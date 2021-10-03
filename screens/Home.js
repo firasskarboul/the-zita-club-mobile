@@ -32,9 +32,9 @@ export default function Home({ navigation }) {
                 <TouchableOpacity style={{ ...styles.navButton, marginBottom: 50 }} onPress={() => navigation.navigate('Paiement')}>
                     <Text style={{ color: 'white', fontSize: 40 }}>PAIEMENT</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Scan')}>
+                {/* <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Scan')}>
                     <Text style={{ color: 'white', fontSize: 40, textAlign: 'center' }}>SCAN QR CODE</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
 
